@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <title>Hourator</title>
+        <script type="text/javascript">
+        	function do_enter(the_form)
+        	{
+        	    the_form.selected_action.value = "enter";
+        	    do_submit(the_form);
+            }
+
+        	function do_exit(the_form)
+        	{
+        	    the_form.selected_action.value = "exit";
+        	    do_submit(the_form);
+            }
+
+        	function do_note(the_form)
+        	{
+        	    the_form.selected_action.value = "note";
+        	    do_submit(the_form);
+            }
+
+        	function do_press_enter(the_form)
+        	{
+        	    if (the_form.selected_action.value == "none")
+        	    {
+        	        the_form.selected_action.value = "note";
+                }
+        	    do_submit(the_form);
+            }
+
+        	function do_submit(the_form)
+        	{
+        		if (the_form.selected_name.value == "-")
+       			{
+            		alert("Please select your name");
+            		the_form.selected_action.value = "none";
+            		location.reload();
+       			}
+        		else
+       			{
+       				the_form.submit();
+       			}
+        	}
+
+        setTimeout("showIt()", 5000);
+
+        function showIt()
+        {
+          document.getElementById("hid").style.visibility = "hidden";
+        }
+
+
+        </script>
+        <style type="text/css">
+input, select
+{
+    outline: none !important;
+    border:10px solid #dddddd;
+    box-shadow: 0 0 10px #eeeeee;
+}
+input[type=button]
+{
+	font-size:64px;
+}
+input[type=submit]
+{
+	font-size:64px;
+}
+input[type=text]
+{
+	font-size:32px;
+}
+input:focus, select:focus
+{
+    outline: none !important;
+    border:10px solid red;
+    box-shadow: 0 0 10px #ff0000;
+}
+p, select
+{
+	text-align: center;
+	font-size:32px;
+}
+		</style>
+    </head>
+	<body onLoad="document.enter_exit.selected_name.focus()" style="background-color:#d0d0ff; font-family:Arial">
+    <form name="enter_exit" action="add" method="post" onsubmit="do_press_enter(this.form)" autocomplete="off">
+	<table width="100%" border="10" cellpadding="10" cellspacing="0">
+	<tr><td>
+		<p>
+    	<b>SELECT YOUR NAME FROM THE LIST BELOW AND THEN...</b>
+		<br />
+		<br />
+    	<select name="selected_name">
+		{% for nameobj in names %}
+			<option value="{{ nameobj['idname'] }}">{{ nameobj['txtname'] }}</option>
+		{% endfor %}
+		</select>
+		</p>
+	</td></tr>
+	<tr><td>
+		<p>
+	 	<b>CLICK ON ENTER OR EXIT</b>
+        <br />
+        <br />
+	 	</p>
+        <table border="0" width="100%">
+        <tr>
+        <td>
+		<p>
+		<input type="button" value="Enter (Alt+1)" accesskey="1" style="background-color:#00ff00" onclick="do_enter(this.form)"/>
+        </p>
+        </td>
+        <td>
+        <p>
+		<input type="button" value="Exit (Alt+2)" accesskey="2" style="background-color:#ff0000" onclick="do_exit(this.form)"/>
+		</p>
+        </td>
+        </tr>
+        </table>
+		<br />
+		<br />
+		<br />
+ 		<input type="hidden" name="selected_action" value="none"/>
+	</td></tr>
+	<tr><td>
+	<p>
+	OR...
+	</p>
+	</td></tr>
+	<tr><td>
+		<p>
+    	<b>ENTER YOUR NOTE AND CLICK ON SEND NOTE</b>
+		<br />
+		<br />
+		Notes: <input type="text" size="64" name="selected_notes" value="" style="background-color:#ffffff"/>
+		<br />
+		<br />
+		<input type="submit" value="Send Note (Alt+n)" accesskey="n" style="background-color:#00ff00" onclick="do_note(this.form)"/>
+		</p>
+	</td></tr>
+	</table>
+	</form>
+
+		<p id="hid">
+		{{ extra }}
+		</p>
+		
+        {% block content %}
+        <!-- insert page specific content here -->
+        {% endblock %}
+        {{ validation }}
+    </body>
+</html>
